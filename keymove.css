@@ -1,0 +1,75 @@
+body {
+  font-family: "Roboto";
+  margin: 0;
+}
+
+.mainTemplate {
+  display: flex;
+}
+
+.floatingBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 2px 80px rgba(197, 197, 197, 0.39);
+  margin: 2rem;
+  width: 432px;
+  height: 30rem;
+  border-radius: 20px;
+  padding: 24px 24px;
+}
+
+.componentHeader {
+  font-size: 24px;
+  font-family: "Roboto";
+  font-weight: 900;
+  color: rgb(37, 37, 37);
+}
+
+.buttonArea {
+  margin-top: 16px;
+  width: 432px;
+  height: 432px;
+  background-color: rgba(212, 212, 212, 0.192);
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonRowWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 144px;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  margin: 12px;
+  border-radius: 16px;
+  background-color: rgba(211, 211, 211, 0.274);
+  transition: all ease-in-out 0.3s 0s;
+  font-size: 28px;
+  font-weight: 900;
+  color: rgb(175, 175, 175);
+}
+
+.buttonWrapper:hover {
+  background-color: rgba(128, 128, 128, 0.274);
+  color: rgb(85, 85, 85);
+  cursor: pointer;
+  transition: all ease-in-out 0.3s 0s;
+}
+
+.messageTextArea {
+  background-color: rgba(212, 212, 212, 0.192);
+  margin-top: 16px;
+  height: 200px;
+  border: 0;
+  padding: 12px;
+  resize: none;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>keymove</title>
+    <link rel="stylesheet" type="text/css" href="keymove.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto"
+    />
+    <script
+      src="https://kit.fontawesome.com/6b41d69df8.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="mainTemplate">
+      <div class="floatingBox">
+        <span class="componentHeader">Button Control</span>
+        <div class="buttonArea">
+          <div class="buttonRowWrapper">
+            <div
+              class="buttonWrapper"
+              onclick="createJoystickSendQueue('FORWARD')"
+            >
+              <i class="fas fa-chevron-up"></i>
+            </div>
+          </div>
+          <div class="buttonRowWrapper">
+            <div
+              class="buttonWrapper"
+              onclick="createJoystickSendQueue('LEFT')"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </div>
+            <div
+              class="buttonWrapper"
+              onclick="createJoystickSendQueue('STOP')"
+            >
+              <i class="fas fa-stop"></i>
+            </div>
+            <div
+              class="buttonWrapper"
+              onclick="createJoystickSendQueue('RIGHT')"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </div>
+          </div>
+          <div class="buttonRowWrapper">
+            <div
+              class="buttonWrapper"
+              onclick="createJoystickSendQueue('BACKWARD')"
+            >
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="floatingBox">
+        <span class="componentHeader">Websocket Status</span>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            height: 100%;
+          "
+        >
+          <textarea
+            id="messageTextArea"
+            class="messageTextArea"
+            rows="10"
+            cols="50"
+            readonly
+          ></textarea>
+          <div>
+            <input type="text" id="directInput" />
+            <button onclick="sendMessageByInput()">SEND</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      let webSocket = new WebSocket("ws://192.168.0.98:9998");
+      let messageTextArea = document.getElementById("messageTextArea");
+      let messageInputArea = document.getElementById("directInput");
+      webSocket.onopen = function (message) {
+        writeTextareaWithNewline(messageTextArea, "[SYSTEM] Server connected!");
+      };
+      webSocket.onclose = function (message) {
+        writeTextareaWithNewline(messageTextArea, "[SYSTEM] Server Disconnect");
+      };
+      webSocket.onerror = function (message) {
+        writeTextareaWithNewline(messageTextArea, "[SYSTEM] error");
+      };
+      webSocket.onmessage = function (message) {
+        writeTextareaWithNewline(messageTextArea, "[RECEIVED] " + message.data);
+      };
+      function disconnect() {
+        webSocket.close();
+      }
+      function sayhi(data) {
+        alert(data);
+      }
+      let writeTextareaWithNewline = (targetTextArea, data) => {
+        targetTextArea.scrollTop = targetTextArea.scrollHeight;
+        targetTextArea.value += data + "\n";
+      };
+      let sendMessage = (data) => {
+        if (webSocket.readyState != 1) {
+          writeTextareaWithNewline(
+            messageTextArea,
+            "[SYSTEM] Websock is not connected"
+          );
+        } else {
+          webSocket.send(data);
+          writeTextareaWithNewline(messageTextArea, "[SEND] " + data);
+        }
+      };
+      let sendMessageByInput = () => {
+        sendMessage(messageInputArea.value);
+        messageInputArea.value = "";
+      };
+      let createJoystickSendQueue = (direction) => {
+        let data = {
+          type: "REQUEST",
+          input: direction,
+        };
+        sendMessage(JSON.stringify(data));
+      };
+    </script>
+  </body>
+</html>
